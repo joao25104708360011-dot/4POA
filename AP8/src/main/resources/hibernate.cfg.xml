@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-configuration>
+    <session-factory>
+        <!-- Configurações da Base de Dados H2 -->
+        <property name="hibernate.connection.driver_class">org.h2.Driver</property>
+        <property name="hibernate.connection.url">jdbc:h2:~/banco_tarefas;AUTO_SERVER=TRUE</property>
+        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
+
+        <!-- Configurações do Hibernate -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">true</property>
+
+        <!-- Mapeamento de Entidades -->
+        <mapping class="br.AP8.model.Tarefa"/>
+    </session-factory>
+</hibernate-configuration>
