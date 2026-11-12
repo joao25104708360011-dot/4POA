@@ -51,4 +51,8 @@ public class Profissional {
 	public void modificarEspecialidade(Especialidade especialidade) {
 		this.especialidade = especialidade;
 	}
+
+	public Long getId() {
+		return null;
+	}
 }

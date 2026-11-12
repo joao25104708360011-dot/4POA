@@ -9,4 +9,4 @@ public class EsteticaApp {
 	public static void main(String[] args) {
 		SpringApplication.run(EsteticaApp.class, args);
 	}
-}
+}	
