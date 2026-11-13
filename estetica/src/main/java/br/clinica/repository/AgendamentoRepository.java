@@ -24,6 +24,7 @@ public interface AgendamentoRepository
         AND a.horarioInicio < :fim
         AND a.horarioFim > :inicio
         AND a.status <> :statusCancelado
+        AND a.status <> br.clinica.model.StatusAgendamento.FALTOU
     """)
     List<Agendamento> buscarAgendamentosNoPeriodo(
             @Param("profissionalId") Long profissionalId,
@@ -38,6 +39,7 @@ public interface AgendamentoRepository
         AND a.horarioInicio < :fim
         AND a.horarioFim > :inicio
         AND a.status <> :statusCancelado
+        AND a.status <> br.clinica.model.StatusAgendamento.FALTOU
     """)
     boolean existeConflito(
             @Param("profissionalId") Long profissionalId,
