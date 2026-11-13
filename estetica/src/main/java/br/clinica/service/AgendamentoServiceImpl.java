@@ -117,7 +117,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         agendamento.setServico(servico);
         agendamento.setHorarioInicio(inicio);
         agendamento.setHorarioFim(fim);
-        agendamento.setStatus(StatusAgendamento.AGENDADO);
+        agendamento.setStatus(StatusAgendamento.PENDENTE_PAGAMENTO);
 
         Agendamento salvo = agendamentoRepository.save(agendamento);
 
@@ -189,12 +189,55 @@ public class AgendamentoServiceImpl implements AgendamentoService {
             );
         }
 
+        if (agendamento.getStatus() == StatusAgendamento.FALTOU) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Não é possível cancelar um agendamento com falta registrada."
+            );
+        }
+
         agendamento.setStatus(StatusAgendamento.CANCELADO);
         agendamento.setCanceladoEm(LocalDateTime.now());
 
         Agendamento salvo = agendamentoRepository.save(agendamento);
 
         return converterParaResp(salvo);
+    }
+
+    @Override
+    @Transactional
+    public AgendamentoResp confirmar(Long id) {
+
+        Agendamento agendamento = buscarAgendamento(id);
+
+        if (agendamento.getStatus() != StatusAgendamento.PENDENTE_PAGAMENTO) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Só é possível confirmar um agendamento que aguarda pagamento."
+            );
+        }
+
+        agendamento.setStatus(StatusAgendamento.AGENDADO);
+
+        return converterParaResp(agendamentoRepository.save(agendamento));
+    }
+
+    @Override
+    @Transactional
+    public AgendamentoResp registrarFalta(Long id) {
+
+        Agendamento agendamento = buscarAgendamento(id);
+
+        if (agendamento.getStatus() != StatusAgendamento.AGENDADO) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Só é possível registrar falta em um agendamento confirmado."
+            );
+        }
+
+        agendamento.setStatus(StatusAgendamento.FALTOU);
+
+        return converterParaResp(agendamentoRepository.save(agendamento));
     }
 
     private Agendamento buscarAgendamento(Long id) {
